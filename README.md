@@ -1,10 +1,63 @@
 ## `水波纹进度条[自定义控件类]`[ProgressCircleView.java]
 ####使用方法，类的头部有说明
+####这里我们来讲一下关键代码，对于这个控件，难就难在如何绘制水波纹这一点上，当然如果你有接触过贝塞尔曲线，相信这一点点难度立马就被你克服了。
+* 为了方便各位更好的理解，我这里分别从左边和右边绘制了水波纹曲线的效果，不过视觉上似乎没多大区别
+```java
+    /**
+     * @param direction 0从左至右，1从右至左(绘制)
+     */
+    private void drawQuad(int direction) {
+        //绘制进度波纹
+        path.reset();
+        //计算画笔所在的Y坐标值，直径 - 进度移动距离
+        float py = (1 - (float) currentProgress / maxProgress) * 2 * radius;
+        switch (direction) {
+            case 0:
+                //x轴不变，向Y轴方向移动画笔（这里为向上）
+                path.moveTo(0, py);
+                //默认水波纹半径
+                float pRadius = 2f * radius / progressDensity;//progressDensity为水波纹的密度
+                //水波纹当前半径
+                float cRadius = (1 - (float) currentProgress / maxProgress) * pRadius;
+                for (int i = 0; i < progressDensity; i++) {
+                    //这里是在一条直线上绘制的是上下循环的贝塞尔曲线
+                    //下曲线，这里可以去掉,但不去掉会更美观
+                    path.rQuadTo(pRadius, cRadius, 2 * pRadius, 0);//绘制贝塞尔曲线，每次绘制相对上一条的位置开始
+                    //上曲线
+                    path.rQuadTo(pRadius, -cRadius, 2 * pRadius, 0);
+                }
+                path.lineTo(width, py);
+                path.lineTo(width, heigth);
+                path.lineTo(0, heigth);
+                break;
+            case 1:
+                //x轴不变，向Y轴方向移动画笔（这里为向上）
+                path.moveTo(width, py);
+                //默认水波纹半径
+                float pRadius1 = 2f * radius / progressDensity;//progressDensity为水波纹的密度
+                //水波纹当前半径
+                float cRadius1 = (1 - (float) currentProgress / maxProgress) * pRadius1;
+                for (int i = 0; i < progressDensity; i++) {
+                    //这里是在一条直线上绘制的是上下循环的贝塞尔曲线
+                    //下曲线，这里可以去掉,但不去掉会更美观
+                    path.rQuadTo(-pRadius1, cRadius1, -2 * pRadius1, 0);//绘制贝塞尔曲线，每次绘制相对上一条的位置开始
+                    //上曲线
+                    path.rQuadTo(-pRadius1, -cRadius1, -2 * pRadius1, 0);
+                }
+                path.lineTo(0, heigth);
+                path.lineTo(width, heigth);
+                path.lineTo(width, py);
+                break;
+            default:
+                break;
+        }
+        path.close();
+        bitmapCanvas.drawPath(path, progressPaint);
+    }
+```
+###接下来就是贴效果图的时候了
 #####图片非本人的，因不用模拟器，无法制作gif动画，且盗用一次别人的效果图，真实效果图底部没有Snakebar.
 > ![image](https://github.com/xiehui999/CustomBall/blob/master/images/123.gif)
-
-
-
 [ProgressCircleView.java]: https://github.com/flyingfishes/ProgressCircleView/edit/master/
 
 
