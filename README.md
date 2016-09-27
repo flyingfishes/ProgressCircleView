@@ -1,6 +1,9 @@
 ## `水波纹进度条[自定义控件类]`[ProgressCircleView.java]
 ####使用方法，类的头部有说明
 ####这里我们来讲一下关键代码，对于这个控件，难就难在如何绘制水波纹这一点上，当然如果你有接触过贝塞尔曲线，相信这一点点难度立马就被你克服了。
+这里我贴一下我们需要的贝塞尔曲线是怎么绘制的：<br>
+![quad](http://mmbiz.qpic.cn/mmbiz_gif/FoiciaVBBCfia5rMBozTalqKT1lsnIyfCg3V8KiaqickvgicB1Bz7I3rxVQzCq3zoNOaYR5kPFicWS2FH1B4LkwO5WC0w/0?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1)<br>
+使用方法，二阶贝塞尔曲线绘制：path.rQuadTo(dx1, dy1, dx2, dy2);参数对应P1和P2的坐标。
 * 为了方便各位更好的理解，我这里分别从左边和右边绘制了水波纹曲线的效果，不过视觉上似乎没多大区别
 ```java
     /**
